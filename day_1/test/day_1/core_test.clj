@@ -40,11 +40,30 @@
   (testing "should return 83 for line eightwothree"
     (is (= (get-numbers-from "eightwothree") 83)))
   )
-;two1nine
-;eightwothree
-;abcone2threexyz
-;xtwone3four
-;4nineeightseven2
-;zoneight234
-;7pqrstsixteen
+
+(deftest test-second-part-third-line
+  (testing "should return 13 for line abcone2threexyz"
+    (is (= (get-numbers-from "abcone2threexyz") 13)))
+  )
+
+(deftest test-second-part-fourth-line
+  (testing "should return 24 for line xtwone3four"
+    (is (= (get-numbers-from "xtwone3four") 24)))
+  )
+
+(deftest test-second-part-fith-line
+  (testing "should return 4 for line 4nineeightseven2"
+    (is (= (get-numbers-from "4nineeightseven2") 42)))
+  )
+
+(deftest test-second-part-sixth-line
+  (testing "should return 14 for line zoneight234"
+    (is (= (get-numbers-from "zoneight234") 14)))
+  )
+
+(deftest test-second-part-sixth-line
+  (testing "should return 76 for line 7pqrstsixteen"
+    (is (= (get-numbers-from "7pqrstsixteen") 76)))
+  )
+
 ;In this example, the calibration values are 29, 83, 13, 24, 42, 14, and 76. Adding these together produces 281.
