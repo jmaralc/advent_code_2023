@@ -3,7 +3,7 @@
 
 (defn get-numbers-from
   [line]
-  (let [numerized-line (clojure.string/replace line #"two|nine" {"two" "2" "nine" "9"})]
+  (let [numerized-line (clojure.string/replace line #"two|three|eight|nine" {"two" "2" "three" "3" "eight" "8" "nine" "9"})]
     (let [digits (clojure.string/replace (clojure.string/lower-case numerized-line) #"[a-z]" "")]
       (Integer/parseInt (str (first digits) (last digits)))
       )

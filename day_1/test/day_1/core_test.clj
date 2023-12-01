@@ -36,6 +36,10 @@
     (is (= (get-numbers-from "two1nine") 29)))
   )
 
+(deftest test-second-part-second-line
+  (testing "should return 83 for line eightwothree"
+    (is (= (get-numbers-from "eightwothree") 83)))
+  )
 ;two1nine
 ;eightwothree
 ;abcone2threexyz
