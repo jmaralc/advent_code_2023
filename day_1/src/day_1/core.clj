@@ -3,9 +3,12 @@
 
 (defn get-numbers-from
   [line]
-  (let [digits (clojure.string/replace (clojure.string/lower-case line) #"[a-z]" "")]
-    (Integer/parseInt (str (first digits) (last digits)))
-    ))
+  (let [numerized-line (clojure.string/replace line #"two|nine" {"two" "2" "nine" "9"})]
+    (let [digits (clojure.string/replace (clojure.string/lower-case numerized-line) #"[a-z]" "")]
+      (Integer/parseInt (str (first digits) (last digits)))
+      )
+    )
+)
 
 (defn get-sum-of-lines
   [lines]
