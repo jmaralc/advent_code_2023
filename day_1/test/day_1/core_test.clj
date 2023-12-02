@@ -26,10 +26,10 @@
     (is (= (get-sum-of-lines ["1abc2" "pqr3stu8vwx" "a1b2c3d4e5f" "treb7uchet"]) 142)))
   )
 
-(deftest test-sum-lines-in-file
-  (testing "should return the sum of all the inputlines of the file"
-    (is (= (process-file "./resources/calibration_document.txt") 54630)))
-  )
+;(deftest test-sum-lines-in-file
+;  (testing "should return the sum of all the inputlines of the file"
+;    (is (= (process-file "./resources/calibration_document.txt") 54630)))
+;  )
 
 (deftest test-second-part-first-line
   (testing "should return 29 for line two1nine"
@@ -67,9 +67,56 @@
   )
 
 
-(deftest test-second-part-sum-up-multiple-lines
-  (testing "should return the sum of all the inputlines"
-    (is (= (get-sum-of-lines ["two1nine" "eightwothree" "abcone2threexyz" "xtwone3four" "4nineeightseven2" "zoneight234" "7pqrstsixteen"]) 281)))
+(deftest test-second-part-random-line
+  (testing "should return 27 for line ljtwonefivesjninetpzhsbfxthree2vknbffmq7d"
+    (is (= (get-numbers-from "ljtwonefivesjninetpzhsbfxthree2vknbffmq7d") 27)))
+  )
+(deftest test-second-part-random-line
+  (testing "should return 82 for line nshfeight6eightonenineeighttwo"
+    (is (= (get-numbers-from "nshfeight6eightonenineeighttwo") 82)))
   )
 
-;In this example, the calibration values are 29, 83, 13, 24, 42, 14, and 76. Adding these together produces 281.
+(deftest test-second-part-random-line
+  (testing "should return 78 for line 7fiveeightoneightvs"
+    (is (= (get-numbers-from "7fiveeightoneightvs") 78)))
+  )
+
+(deftest test-second-part-sum-up-multiple-lines
+  (testing "should return the sum of all the inputlines"
+    (is (= (get-sum-of-lines [
+                              "two1nine"
+                              "eightwothree"
+                              "abcone2threexyz"
+                              "xtwone3four"
+                              "4nineeightseven2"
+                              "zoneight234"
+                              "7pqrstsixteen"
+                              ]) 281)))
+  )
+
+(deftest test-second-part-sum-up-multiple-lines-tricky
+  (testing "should return the sum of all the inputlines"
+    (is (= (get-sum-of-lines [
+                              "soneightninetwo161vhmf"      ;11 91
+                              "voneightcqkcdvhxh4eight"     ;18 48
+                              "9qzbqxmqonefiveknrnzpxoneightrq" ;91 95
+                              "4btqghfcqx25fivetwo95oneightxf" ;41 45
+                              "bgoneightkhgvqbfivefour1seven" ;17 57
+                              "tvoneight3xtbvffvthreezcbrgk85eightsixbdgqspftkr" ;16 36
+                              "15qhpvsevensixoneightt"      ;11 16
+                              "7fiveeightoneightvs"         ;71 78
+                              "fivesevenfour9jslninesevenjtttt7oneightssr" ;51 57
+                              "koneightkk7dbtkdmmbf"        ;17 77
+                              "4ssskfrfqhz9eightfour37oneightjm" ;41 47
+                              "25sixjrjqgl5fivekhtxstwovgxzfpvzfmoneightb" ;21 22
+                              "onetwonine4noneightvk"       ;11 14
+                              "honeight5one"                ;11 51
+                              "mzoneight9995five2bdg"       ;12 92
+                              ]) 496)))
+  )
+
+
+(deftest test-sum-lines-in-file
+  (testing "should return the sum of all the inputlines of the file"
+    (is (= (process-file "./resources/input.txt") 54770)))
+  )
