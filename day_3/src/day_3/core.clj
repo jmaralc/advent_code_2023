@@ -2,6 +2,7 @@
   (:gen-class))
 
 (def special-characters ["#" "+" "$" "*"])
+(def numbers ["0" "1" "2" "3" "4" "5" "6" "7" "8" "9"])
 
 (defn index-engine-lines
   [input]
@@ -16,6 +17,13 @@
     )
   )
 
+(defn find-number-inline
+  [[line-index line-content]]
+  (let [found-indexes (keep-indexed (fn [index character] (if (some #(= (str character) %) numbers) [line-index index])) line-content)]
+    (if (>= (count found-indexes) 1) found-indexes nil)
+    )
+  )
+
 (defn detect-engine-characters
   [input]
   (let [indexed-lines (doall (index-engine-lines input))]
@@ -23,6 +31,12 @@
     )
   )
 
+(defn detect-engine-numbers
+  [input]
+  (let [indexed-lines (doall (index-engine-lines input))]
+    (into [] (reduce (fn[col cur] (concat col cur)) (keep find-number-inline indexed-lines)))
+    )
+  )
 ;(defn detect-numbers-in-line
 ;  [line]
 ;  (map

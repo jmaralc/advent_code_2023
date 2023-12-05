@@ -20,6 +20,10 @@
     (is (= (detect-engine-characters test-input) [[1,3] [3,6] [4,3],[5,5],[8,3],[8,5]])))
   )
 
+(deftest detect-engine-numbersposition
+  (testing "should return the position of all the engine numbers"
+    (is (= (detect-engine-numbers  "467..114..") [[0,0] [0,1] [0,2],[0,5],[0,6],[0,7]])))
+  )
 ;
 ;(deftest find-in-horizontal-1
 ;  (testing "should detect numbers in the first row independent of the second"
