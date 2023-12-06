@@ -37,23 +37,60 @@
     (into [] (reduce (fn[col cur] (concat col cur)) (keep find-number-inline indexed-lines)))
     )
   )
-;(defn detect-numbers-in-line
-;  [line]
-;  (map
-;    (fn[x] (Integer/parseInt x))
-;    (filter
-;      (fn [string] (> (count string) 1))
-;      (let [substrings       (map
-;                               (fn [string] (clojure.string/replace string "." ""))
-;                               (re-seq #"[^\*\$\+\#]+" line)
-;                               )
-;            ]
-;        (if (> (count substrings) 1) substrings [])
-;        )
-;
-;      )
-;    )
-;  )
+
+(defn taxicab-distance
+  [point-1 point-2]
+  (+ (abs (- (get point-1 0) (get point-2 0))) (abs (- (get point-1 1) (get point-2 1))) )
+  )
+
+(defn chebyshev-distance
+  [point-1 point-2]
+  (max (abs (- (get point-1 0) (get point-2 0))) (abs (- (get point-1 1) (get point-2 1))) )
+  )
+
+(defn get-number-neighbours
+  [engine-character numbers]
+  (filter (fn[number] (<= (chebyshev-distance engine-character number) 1)) numbers)
+  )
+
+(defn neighbours-positions?
+  [point-1 point-2]
+  (and (= (get point-1 0) (get point-2 0)) (<= (abs (- (get point-1 1) (get point-2 1))) 1))
+  )
+
+(defn have-neighbours
+  [collection next-position]
+  (if (= (count collection) 0) [next-position]
+                               (cond
+                                 (neighbours-positions? (last collection) next-position) collection
+                                 :else (concat collection [next-position])
+                                 )
+                               )
+    )
+(defn get-neighbours-positions
+  [engine-characters engine-numbers]
+  (into [] (reduce (fn[col cur] (concat col cur)) (map (fn[character] (get-number-neighbours character engine-numbers)) engine-characters)
+  )))
+
+(defn get-candidate-positions
+  [input]
+  (let [engine-characters (detect-engine-characters input)]
+    (let [engine-numbers (detect-engine-numbers input)]
+      (let [neighbour-positions (get-neighbours-positions engine-characters engine-numbers)]
+        (reduce have-neighbours [] (sort neighbour-positions))
+        )
+      )))
+
+(defn get-number-of-candidate
+  [input-lines candidate]
+  (str (get (get input-lines (get candidate 0)) (get candidate 1)))
+  )
+(defn get-candidate-numbers
+  [input]
+  (let [input-lines (clojure.string/split-lines input)]
+    (map (fn[candidate] (get-number-of-candidate input-lines candidate)) (get-candidate-positions input))
+    )
+  )
 
 (defn -main
   "I don't do a whole lot ... yet."
