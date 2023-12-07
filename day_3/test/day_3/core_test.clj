@@ -47,6 +47,15 @@
   (is (= (get-candidate-numbers test-input) ["7" "3" "6" "7" "2" "7" "6" "5"]))
   )
 
+(deftest get-whole-number-from-initial-position
+  (testing "should return the whole number of a string")
+  (is (= (get-whole-numbers ["467..114.."] [0 2]) [467]))
+  )
+
+(deftest get-final-engine-numbers
+  (testing "should return the initial candidates for engine numbers")
+  (is (= (get-part-numbers test-input) [467 35 633 617 592 755 664 598]))
+  )
 
 
 ;(deftest find-in-horizontal-1

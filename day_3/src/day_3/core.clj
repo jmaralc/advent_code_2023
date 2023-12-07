@@ -85,11 +85,39 @@
   [input-lines candidate]
   (str (get (get input-lines (get candidate 0)) (get candidate 1)))
   )
+
+(defn my-left-search
+  [y current-line numbers-to-the-left]
+  (if (< y 0) numbers-to-the-left
+              (when (>= y 0)
+              (let [current-char (get current-line y)]
+                (if (not (some #(= (str current-char) %) numbers))
+                  numbers-to-the-left
+              (recur (dec y) current-line (str current-char numbers-to-the-left ))))))
+  )
+
+(defn get-whole-numbers
+  [input-lines candidate]
+  (let [initial-number (get-number-of-candidate input-lines candidate)]
+    (let [current-line (get input-lines (get candidate 0))]
+      (let [left-numbers (my-left-search (- (get candidate 1) 1) current-line "")]
+        [(Integer/parseInt (str left-numbers initial-number))]
+        )
+      )
+
+    )
+  )
+
 (defn get-candidate-numbers
   [input]
   (let [input-lines (clojure.string/split-lines input)]
     (map (fn[candidate] (get-number-of-candidate input-lines candidate)) (get-candidate-positions input))
     )
+  )
+
+(defn get-part-numbers
+  [input]
+  (get-candidate-numbers input)
   )
 
 (defn -main
