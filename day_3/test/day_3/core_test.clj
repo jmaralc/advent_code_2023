@@ -36,9 +36,13 @@
   (testing "should return the taxicab distance between two points"
     (is (= (taxicab-distance [0 0] [1 0]) 1))))
 
+(deftest get-gear-ratios-test
+  (testing "should return the number of gears in the schematic"
+    (is (= (get-ratios-numbers test-input) [16345 451490] ))))
+
 (deftest get-close-engine-numbers
   (testing "should return the numbers that are touching a engine character"
-    (is (= (get-number-neighbours [1,3] [[0,0] [0,1] [0,2],[0,5],[0,6],[0,7]]) [[0,2]]))))
+    (is (= (get-number-neighbours [1,3] [[0,0] [0,1] [0,2],[0,5],[0,6],[0,7]] 1) [[0,2]]))))
 
 (deftest merge-consecutive-numbers
   (testing "should return just one numbers when the position of two numbers is consecutive"
@@ -115,4 +119,9 @@
 (deftest solve-file
   (testing "should return the sum of the part numbers of an engine loaded from a file")
   (is (= (get-sum-of-part-numbers-of-file "./resources/input.txt") 519444))
+  )
+
+(deftest solve-ratio-file
+  (testing "should return the sum of the ratio numbers of an engine loaded from a file")
+  (is (= (get-sum-of-ratios-of-file "./resources/input.txt") 74528807))
   )

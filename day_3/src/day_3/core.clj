@@ -2,6 +2,7 @@
   (:gen-class))
 
 (def special-characters ["#" "+" "$" "*" "/" "%" "=" "&" "-" "@"])
+(def gear-characters ["*"])
 (def numbers ["0" "1" "2" "3" "4" "5" "6" "7" "8" "9"])
 
 (defn index-engine-lines
@@ -17,6 +18,13 @@
     )
   )
 
+(defn find-gear-inline
+  [[line-index line-content]]
+  (let [found-indexes (keep-indexed (fn [index character] (if (some #(= (str character) %) gear-characters) [line-index index])) line-content)]
+    (if (>= (count found-indexes) 1) found-indexes nil)
+    )
+  )
+
 (defn find-number-inline
   [[line-index line-content]]
   (let [found-indexes (keep-indexed (fn [index character] (if (some #(= (str character) %) numbers) [line-index index])) line-content)]
@@ -28,6 +36,13 @@
   [input]
   (let [indexed-lines (doall (index-engine-lines input))]
     (into [] (reduce (fn[col cur] (concat col cur)) (keep find-character-inline indexed-lines)))
+    )
+  )
+
+(defn detect-gear-characters
+  [input]
+  (let [indexed-lines (doall (index-engine-lines input))]
+    (into [] (reduce (fn[col cur] (concat col cur)) (keep find-gear-inline indexed-lines)))
     )
   )
 
@@ -49,8 +64,8 @@
   )
 
 (defn get-number-neighbours
-  [engine-character numbers]
-  (filter (fn[number] (<= (chebyshev-distance engine-character number) 1)) numbers)
+  [engine-character numbers distance-tolerance]
+  (filter (fn[number] (<= (chebyshev-distance engine-character number) distance-tolerance)) numbers)
   )
 
 (defn neighbours-positions?
@@ -76,18 +91,27 @@
 
 
 (defn get-neighbours-positions
-  [engine-characters engine-numbers]
-  (into [] (reduce (fn[col cur] (concat col cur)) (map (fn[character] (get-number-neighbours character engine-numbers)) engine-characters)
+  [engine-characters engine-numbers distance-tolerance]
+  (into [] (reduce (fn[col cur] (concat col cur)) (map (fn[character] (get-number-neighbours character engine-numbers distance-tolerance)) engine-characters)
   )))
+
+(defn get-gears-positions
+  [engine-characters engine-numbers distance-tolerance]
+  (let [cands (map (fn[candidates] (remove-neighbours candidates [] 0)) (map (fn[character] (get-number-neighbours character engine-numbers distance-tolerance)) engine-characters))]
+    (filter #(= (count %) 2) cands)
+    ))
+
 
 (defn get-candidate-positions
   [input]
   (let [engine-characters (detect-engine-characters input)]
     (let [engine-numbers (detect-engine-numbers input)]
-      (let [neighbour-positions (get-neighbours-positions engine-characters engine-numbers)]
+      (let [neighbour-positions (get-neighbours-positions engine-characters engine-numbers 1)]
         (remove-neighbours (sort neighbour-positions) [] 0)
         )
       )))
+
+
 
 (defn get-number-of-candidate
   [input-lines candidate]
@@ -133,6 +157,24 @@
     )
   )
 
+
+(defn get-gear-ratios-positions
+  [input]
+  (let [gear-characters (detect-gear-characters input)]
+    (let [engine-numbers (detect-engine-numbers input)]
+      (get-gears-positions gear-characters engine-numbers 1)
+      )
+    ))
+
+(defn get-ratios-numbers
+  [input]
+  (let [input-lines (clojure.string/split-lines input)]
+    (let [part-numbers-pairs (map #(map (fn[candidate] (get-whole-numbers input-lines candidate)) %) (get-gear-ratios-positions input))]
+      (map (fn [x](reduce * x))  (map flatten part-numbers-pairs))
+      )
+    )
+  )
+
 (defn get-part-numbers
   [input]
   (let [input-lines (clojure.string/split-lines input)]
@@ -140,14 +182,25 @@
     )
   )
 
+
 (defn sum-part-numbers
   [input]
   (reduce + (get-part-numbers input))
   )
 
+(defn sum-ratio-numbers
+  [input]
+  (reduce + (get-ratios-numbers input))
+  )
+
 (defn get-sum-of-part-numbers-of-file
   [file-path]
   (sum-part-numbers (slurp file-path))
+  )
+
+(defn get-sum-of-ratios-of-file
+  [file-path]
+  (sum-ratio-numbers (slurp file-path))
   )
 (defn -main
   "I don't do a whole lot ... yet."
