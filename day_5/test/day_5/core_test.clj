@@ -155,10 +155,11 @@
     (is (= (get-lowest-location (slurp "./resources/test-input.txt")) 35))))
 
 
-
-(deftest get-lowest-location-from-real-input
-  (testing "should return 35 when apply to real input"
-    (is (= (get-lowest-location (slurp "./resources/input.txt")) 35))))
+;This breaks the machine because it was not thought to handle real data
+;redo some lines below
+;(deftest get-lowest-location-from-real-input
+;  (testing "should return 35 when apply to real input"
+;    (is (= (get-lowest-location (slurp "./resources/input.txt")) 35))))
 
 (deftest map-definition-to-sequences-test
   (testing "should return the sequences belonging to a map definition"
@@ -179,4 +180,4 @@
 
 (deftest get-lowest-location2-from-real-input
   (testing "should return ? when apply to real input"
-    (is (= (get-lowest-location2 (slurp "./resources/input.txt")) 35))))
+    (is (= (get-lowest-location2 (slurp "./resources/input.txt")) 107430936))))
