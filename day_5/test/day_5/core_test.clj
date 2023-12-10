@@ -155,6 +155,28 @@
     (is (= (get-lowest-location (slurp "./resources/test-input.txt")) 35))))
 
 
+
 (deftest get-lowest-location-from-real-input
   (testing "should return 35 when apply to real input"
     (is (= (get-lowest-location (slurp "./resources/input.txt")) 35))))
+
+(deftest map-definition-to-sequences-test
+  (testing "should return the sequences belonging to a map definition"
+    (is (= (map-definition-to-sequences test-map-ranges)  [[50 98 2] [52 50 48]]))))
+
+(deftest apply-map-sequence-to-seed-test
+  (testing "should return the value of the seed in the after applying the map"
+    (is (= (apply-map-sequence-to-seed 79 [[50 98 2] [52 50 48]]) 81))))
+
+(deftest apply-map-sequence-to-seed-test
+  (testing "should return the value of the seed in the after applying the map"
+    (is (= (apply-map-sequence-to-seed 1 [[50 98 2] [52 50 48]]) 1))))
+
+
+(deftest get-lowest-location2-from-test-input
+  (testing "should return 35 when apply to test input"
+    (is (= (get-lowest-location2 (slurp "./resources/test-input.txt")) 35))))
+
+(deftest get-lowest-location2-from-real-input
+  (testing "should return ? when apply to real input"
+    (is (= (get-lowest-location2 (slurp "./resources/input.txt")) 35))))

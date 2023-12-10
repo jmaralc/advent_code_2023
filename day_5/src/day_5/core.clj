@@ -23,6 +23,13 @@
     )
   )
 
+(defn map-definition-to-sequences
+  [map-definition]
+  (let [lines (clojure.string/split-lines map-definition)]
+    (map line-to-sequence lines)
+  ))
+
+
 (defn generate-map
   [map-definition]
   (reduce merge default-map (map-definition-to-maps map-definition))
@@ -39,10 +46,42 @@
     (map generate-map map-definitions)
     )
   )
+(defn get-maps-sequences
+  [input]
+  (let [map-definitions (re-seq #"(?s)(?<=map:\n).*?(?=\n\n)|(?s)(?<=map:\n).*?(?=\z)" input)]
+    (map map-definition-to-sequences map-definitions)
+    )
+  )
+(defn apply-maps-to-seed
+  [seed maps]
+  (reduce (fn [subject-to-map map] (get map subject-to-map)) seed maps)
+  )
 
 (defn apply-maps-to-seed
   [seed maps]
   (reduce (fn [subject-to-map map] (get map subject-to-map)) seed maps)
+  )
+
+(defn seed-in-sequence
+  [seed sequence]
+  (let [[_ source range] sequence]
+    (and (<= source seed) (< seed (+ source range)))
+    )
+  )
+(defn apply-map-sequence-to-seed
+  [seed map-sequence]
+  (let [applicable-sequence (into [] (filter (fn[sequence] (seed-in-sequence seed sequence)) map-sequence)) ]
+    (if (empty? applicable-sequence) seed
+                                     (let [[[destination source _] & _]  applicable-sequence]
+                                       (+ destination (- seed source))
+                                       )
+                                       )
+
+  ))
+
+(defn apply-all-maps-sequences-to-seed
+  [seed maps-sequences]
+  (reduce (fn [subject-to-map map-sequence] (apply-map-sequence-to-seed subject-to-map map-sequence)) seed maps-sequences)
   )
 
 (defn get-lowest-location
@@ -50,6 +89,14 @@
   (let [seeds (get-seeds input)]
     (let [maps (get-maps input)]
       (reduce min (map (fn [seed] (apply-maps-to-seed seed maps)) seeds))
+      )
+    )
+  )
+(defn get-lowest-location2
+  [input]
+  (let [seeds (get-seeds input)]
+    (let [maps-sequences (get-maps-sequences input)]
+      (reduce min (map (fn [seed] (apply-all-maps-sequences-to-seed seed maps-sequences)) seeds))
       )
     )
   )
