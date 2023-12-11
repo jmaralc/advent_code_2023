@@ -181,3 +181,15 @@
 (deftest get-lowest-location2-from-real-input
   (testing "should return ? when apply to real input"
     (is (= (get-lowest-location2 (slurp "./resources/input.txt")) 107430936))))
+
+(deftest get-seed-ranges-test
+  (testing "should return the ranges for the seeds"
+    (is (= (get-seed-ranges [79 14 55 13]) [(range 79 (+ 79 14)) (range 55 (+ 55 13))]))))
+
+(deftest get-lowest-location3-from-test-input
+  (testing "should return 35 when apply to test input"
+    (is (= (get-lowest-location3 (slurp "./resources/test-input.txt")) 46))))
+
+(deftest get-lowest-location3-from-real-input
+  (testing "should return 35 when apply to real input"
+    (is (= (get-lowest-location3 (slurp "./resources/input.txt")) 23738616))))

@@ -40,6 +40,13 @@
   (map (fn [x] (Long/parseLong x)) (clojure.string/split (clojure.string/replace (first (clojure.string/split-lines input)) #"seeds: " "") #" ") )
   )
 
+(defn get-seed-ranges
+  [input]
+  (let [seeds-sequence (get-seeds input)]
+    (map (fn [[start length]] (range start (+ start length)))  (partition 2 seeds-sequence))
+    )
+  )
+
 (defn get-maps
   [input]
   (let [map-definitions (re-seq #"(?s)(?<=map:\n).*?(?=\n\n)|(?s)(?<=map:\n).*?(?=\z)" input)]
@@ -92,11 +99,30 @@
       )
     )
   )
+
 (defn get-lowest-location2
   [input]
   (let [seeds (get-seeds input)]
     (let [maps-sequences (get-maps-sequences input)]
       (reduce min (map (fn [seed] (apply-all-maps-sequences-to-seed seed maps-sequences)) seeds))
+      )
+    )
+  )
+
+(defn compute-seed-range
+  [maps-sequences seed-range]
+  (println (str "Processing"))
+  (let [values (pmap (fn [seed](apply-all-maps-sequences-to-seed seed maps-sequences)) seed-range)]
+    (reduce min values)
+    )
+  )
+(defn get-lowest-location3
+  [input]
+  (let [seed-ranges (get-seed-ranges input)]
+    (let [maps-sequences (get-maps-sequences input)]
+      (let [locations (pmap (partial compute-seed-range maps-sequences) seed-ranges)]
+        (reduce min locations)
+        )
       )
     )
   )
