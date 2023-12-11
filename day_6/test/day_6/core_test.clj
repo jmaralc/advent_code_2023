@@ -5,6 +5,9 @@
 (def test-input "Time:      7  15   30
 Distance:  9  40  200")
 
+(def test-input-2 "Time:      71530
+Distance:  940200")
+
 (deftest split-input-test
   (testing "should split the input in time and distance components"
     (is (= (split-input test-input)) ["Time:      7  15   30" "Distance:  9  40  200"])))
@@ -13,13 +16,23 @@ Distance:  9  40  200")
   (testing "should return an array of press times"
     (is (= (extract-press-time "Time:      7  15   30") [7 15 30]))))
 
+(deftest extract-press-time-part2-test
+  (testing "should return an array of press times"
+    (is (= (extract-press-time-part2 "Time:      7  15   30") [71530]))))
+
+
 (deftest extract-max-dist-test
   (testing "should return an array of press times"
     (is (= (extract-max-dist "Distance:  9  40  200") [9 40 200]))))
 
+(deftest extract-max-dist-part2-test
+  (testing "should return an array of press times"
+    (is (= (extract-max-dist-part2 "Distance:  9  40  200") [940200]))))
+
+
 (deftest combine-press-time-and-max-distance-test
   (testing "should return an array with pairs of press time and max distance"
-    (is (= (combine-press-time-and-max-distance [7 15 30] [9 40 200])))
+    (is (= (combine-press-time-and-max-distance [7 15 30] [9 40 200]) [[7 9] [15 40] [30 200]]))
     ))
 
 (deftest compute-ways-to-beat-record-test
@@ -42,5 +55,15 @@ Distance:  9  40  200")
 
 (deftest compute-multiply-of-races-posibilities-test-input
   (testing "should return 288for for the test input"
-    (is (= (compute-multiply-of-races-posibilities (slurp "./resources/input.txt") ) 288))
+    (is (= (compute-multiply-of-races-posibilities (slurp "./resources/input.txt") ) 503424))
+    ))
+
+
+(deftest compute-multiply-of-races-posibilitie-part2-test-input
+  (testing "should return 288for for the test input"
+    (is (= (compute-multiply-of-races-posibilities-part2 test-input ) 71503))
+    ))
+(deftest compute-multiply-of-races-posibilities-part2-test-input
+  (testing "should return 288for for the test input"
+    (is (= (compute-multiply-of-races-posibilities-part2 (slurp "./resources/input.txt") ) 32607562))
     ))
